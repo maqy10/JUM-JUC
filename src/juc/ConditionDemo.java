@@ -86,10 +86,9 @@ class ShareData {
     }
 
     public void print(int count) {
-
-        if (count == 5) {
-            lock.lock();
-            try {
+        lock.lock();
+        try {
+            if (count == 5) {
                 while (number != 1) {
                     c1.await();
                 }
@@ -100,13 +99,36 @@ class ShareData {
                 number = 2;
                 //如何通知2个
                 c2.signal(); //通知B线程
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                lock.unlock();
             }
+            if(count == 10){
+                while (number != 2) {
+                    c2.await();
+                }
+                for (int i = 0; i < 10; i++) {
+                    System.out.println(Thread.currentThread().getName() + "\t" + i);
+                }
+                //顺序1完之后是2，将number值改为2
+                number = 3;
+                //如何通知2个
+                c3.signal(); //通知B线程
+            }
+            if(count == 15){
+                while (number != 3) {
+                    c3.await();
+                }
+                for (int i = 0; i < 15; i++) {
+                    System.out.println(Thread.currentThread().getName() + "\t" + i);
+                }
+                //顺序1完之后是2，将number值改为2
+                number = 1;
+                //如何通知2个
+                c1.signal(); //通知B线程
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
-
     }
 
 }
@@ -118,19 +140,22 @@ public class ConditionDemo {
 
         new Thread(() -> {
             for (int i = 0; i < 10; i++) {
-                shareData.print5();
+               // shareData.print5();
+                shareData.print(5);
             }
         }, "A").start();
 
         new Thread(() -> {
             for (int i = 0; i < 10; i++) {
-                shareData.print10();
+                //shareData.print10();
+                shareData.print(10);
             }
         }, "B").start();
 
         new Thread(() -> {
             for (int i = 0; i < 10; i++) {
-                shareData.print15();
+                //shareData.print15();
+                shareData.print(15);
             }
         }, "C").start();
     }

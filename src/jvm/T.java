@@ -28,11 +28,32 @@ package jvm;
  * stack
  *  栈管运行，堆管存储
  *
+ *  栈也叫栈内存，主管Java程序的运行，是在线程创建时创建，它的生命期是跟随线程的生命期，线程结束栈内存也就释放。
+ *  对于栈来说，不存在增圾回收问题，只要线程一结束该栈就自动释放，生命周期和线程一致，是线程私有的，
+ *  8种基本类型的变量+对象的引用变量+实例方法都是在函数的栈内存中分配
+ *
+ *  java方法 = 栈帧
+ *
+ *
  */
 public class T {
+
+
+    public static void m1(){
+        /*System.out.println("222");
+        System.out.println("*******m1");
+        System.out.println("33333");*/
+        m1(); //Exception in thread "main" java.lang.StackOverflowError
+            // 此时main在栈顶，调用m1，m1迭代调用，不停入栈m1栈帧，导致栈溢出错误
+    }
+
     public static void main(String[] args) {
-        Thread t1 = new Thread();
+     /*   Thread t1 = new Thread();
         t1.start();
-        t1.start();  //Exception in thread "main" java.lang.IllegalThreadStateException
+        t1.start();*/  //Exception in thread "main" java.lang.IllegalThreadStateException
+
+        System.out.println("1111");
+        m1();
+        System.out.println("444");
     }
 }

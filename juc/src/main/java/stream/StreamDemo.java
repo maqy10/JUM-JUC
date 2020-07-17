@@ -37,13 +37,13 @@ public class StreamDemo {
 
     public static void main(String[] args) {
 
-        User u1 = new User(11,"a",23);
-        User u2 = new User(12,"b",24);
-        User u3 = new User(13,"c",25);
-        User u4 = new User(14,"d",26);
-        User u5 = new User(16,"e",27);
+        User u1 = new User(11, "a", 23);
+        User u2 = new User(12, "b", 24);
+        User u3 = new User(13, "c", 25);
+        User u4 = new User(14, "d", 26);
+        User u5 = new User(16, "e", 27);
 
-        List<User> list = Arrays.asList(u1,u2,u3,u4,u5);
+        List<User> list = Arrays.asList(u1, u2, u3, u4, u5);
 
 
         /**
@@ -51,9 +51,27 @@ public class StreamDemo {
          * Stream操作是延迟执行的。这意味着他们会等到需要结果的时候才执行
          */
 
+        list.stream().filter(user -> {
+            return user.getId() % 2 == 0;
+        }).filter(t -> {
+            return t.getAge() > 24;
+        }).map(m -> {
+            return m.getUserName().toUpperCase();
+        }).sorted(
+                (o1,o2)->{return o2.compareTo(o1);
+        }).limit(1).forEach(System.out::println);
 
 
-
+   /*     list.stream().filter(user ->
+                user.getId() % 2 == 0
+        ).filter(t ->
+                t.getAge() > 24
+        ).map(m ->
+                m.getUserName().toUpperCase()
+        ).sorted(
+                (o1,o2)-> o2.compareTo(o1)
+        ).limit(1).forEach(System.out::println);
+*/
 
 
 /*============================四大函数式接口
@@ -109,5 +127,6 @@ public class StreamDemo {
 
 
 */
+    }
 
 }
